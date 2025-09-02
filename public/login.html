@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Login - Devil App Store</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-body">
+
+    <!-- इस पेज पर कोई हेडर या फुटर नहीं है ताकि पूरा ध्यान फॉर्म पर रहे -->
+    
+    <div class="login-container">
+        <!-- Login Form -->
+        <form id="loginForm" action="/login" method="POST">
+            <h2 class="form-title">Developer Login</h2>
+            <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-form">Login</button>
+            <p class="forgot-password">
+                <a href="/forgot-password.html">Forgot Password?</a>
+            </p>
+            <p class="toggle-link">
+                Don't have an account? <a href="#" onclick="toggleForms(event)">Create one</a>
+            </p>
+        </form>
+
+        <!-- Registration Form (Initially Hidden) -->
+        <form id="registerForm" style="display: none;" action="/register" method="POST">
+            <h2 class="form-title">Create Developer Account</h2>
+            <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" name="fullName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email Address</label>
+                <input type="email" id="registerEmail" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" name="password" class="form-control" placeholder="Choose a strong password" required>
+            </div>
+            <button type="submit" class="btn-form">Create Account</button>
+            <p class="toggle-link">
+                Already have an account? <a href="#" onclick="toggleForms(event)">Login here</a>
+            </p>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // यह स्क्रिप्ट सिर्फ इसी पेज पर चाहिए, इसलिए इसे यहीं रखा गया है
+        function toggleForms(event) {
+            event.preventDefault();
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

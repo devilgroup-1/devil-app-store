@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload New App - Devil App Store</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Devil App Store</a>
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="/logout" class="btn-logout">Logout</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container">
+            <h1 class="page-title">Upload New Creation</h1>
+            <div class="dashboard-layout">
+                
+                <!-- Sidebar Navigation -->
+                <aside class="dashboard-sidebar">
+                    <ul>
+                        <li><a href="/upload.html" class="active"><i class="fas fa-upload"></i> Upload New App</a></li>
+                        <li><a href="/dashboard"><i class="fas fa-box-open"></i> Your Apps</a></li>
+                        <li><a href="/statistics.html"><i class="fas fa-chart-line"></i> Statistics</a></li>
+                        <li><a href="/settings.html"><i class="fas fa-cog"></i> Account Settings</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Main Content Area: Upload Form -->
+                <section class="dashboard-content">
+                    <div class="content-card">
+                        <h2>App Details</h2>
+                        <p class="description">Fill out the details below to submit your creation for review. Only verified developers can upload apps.</p>
+                        
+                        <form class="upload-form" action="/upload-app" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="appName">App / Creation Name</label>
+                                <input type="text" id="appName" name="appName" class="form-control" placeholder="e.g., Photo Editor Pro" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appCategory">Category</label>
+                                <select id="appCategory" name="category" class="form-control" required>
+                                    <option value="" disabled selected>-- Select a Category --</option>
+                                    <option value="app">Android App (.apk)</option>
+                                    <option value="ebook">Ebook (.epub, .pdf)</option>
+                                    <option value="music">Music (.mp3)</option>
+                                    <option value="game">Game (.apk)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Monetization</label>
+                                <select id="monetization-type" name="isPaid" class="form-control">
+                                    <option value="false" selected>Free</option>
+                                    <option value="true">Paid</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="price-input-container" style="display: none;">
+                                <label for="price">Price (in INR)</label>
+                                <input type="number" id="price" name="price" class="form-control" min="10" value="49" placeholder="e.g., 49">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appFile">Main File (APK, PDF, MP3, etc.)</label>
+                                <input type="file" id="appFile" name="appFile" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appIcon">Icon (Square Image, e.g., 512x512)</label>
+                                <input type="file" id="appIcon" name="appIcon" class="form-control" accept="image/png, image/jpeg" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appScreenshots">Screenshots (Optional, up to 5 images)</label>
+                                <input type="file" id="appScreenshots" name="screenshots" class="form-control" accept="image/jpeg, image/png" multiple>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="appDescription">Description</label>
+                                <textarea id="appDescription" name="description" class="form-control" rows="6" placeholder="Describe your app, its features, and what makes it special." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn-form">Submit for Review</button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="/script.js"></script>
+    <script>
+        // यह छोटी स्क्रिप्ट Paid चुनने पर प्राइस फील्ड दिखाती है
+        document.getElementById('monetization-type').addEventListener('change', function() {
+            const priceContainer = document.getElementById('price-input-container');
+            priceContainer.style.display = this.value === 'true' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>
