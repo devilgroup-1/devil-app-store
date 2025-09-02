@@ -16,8 +16,7 @@ const nodemailer = require('nodemailer'); // <-- Nodemailer को जोड़�
 // 2. एप्लिकेशन और कॉन्फ़िगरेशन
 const app = express();
 const PORT = 3000;
-const CONNECTION_STRING = "mongodb+srv://devil_user:devilgroup2003@cluster0.3yrdulr.mongodb.net/devilappstore?retryWrites=true&w=majority&appName=Cluster0";
-
+const CONNECTION_STRING = process.env.CONNECTION_STRING;
 // Multer कॉन्फ़िगरेशन
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, './uploads/'),
