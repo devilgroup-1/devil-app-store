@@ -1,5 +1,5 @@
 // =================================================================
-// Devil App Store - Final Server Code (Based on Your Original Code)
+// Devil App Store - Final Server Code
 // =================================================================
 
 // 1. मॉड्यूल इंपोर्ट करें
@@ -11,7 +11,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const multer = require('multer');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer'); // <-- Nodemailer को जोड़ा गया
+const nodemailer = require('nodemailer');
 
 // 2. एप्लिकेशन और कॉन्फ़िगरेशन
 const app = express();
@@ -55,6 +55,7 @@ const appSchema = new mongoose.Schema({
     description: { type: String, required: true },
     category: { type: String, required: true },
     developer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    version: { type: String, default: '1.0' },
     filePath: { type: String, required: true },
     iconPath: { type: String, required: true },
     screenshots: [{ type: String }],
@@ -130,116 +131,77 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// ====================== FORGOT PASSWORD रूट को अपडेट किया गया है ======================
 app.post('/forgot-password', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
             const token = crypto.randomBytes(20).toString('hex');
             user.resetPasswordToken = token;
-            user.resetPasswordExpires = Date.now() + 3600000; // 1 घंटा
+            user.resetPasswordExpires = Date.now() + 3600000;
             await user.save();
             const resetURL = `http://localhost:3000/reset/${token}`; // Note: Replace localhost in production
             
-            // Nodemailer ट्रांसपोर्टर कॉन्फ़िगरेशन
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'devilgroup1@gmail.com', // आपका Gmail एड्रेस
-                    pass: 'yqik fncw pmqv gkkb'    // आपका 16-अक्षरों वाला App Password
+                    user: 'devilgroup1@gmail.com',
+                    pass: 'yqik fncw pmqv gkkb'
                 }
             });
 
-            // ईमेल के विकल्प
             const mailOptions = {
                 from: 'Devil App Store <devilgroup1@gmail.com>',
                 to: user.email,
                 subject: 'Password Reset for Your Devil App Store Account',
-                html: `
-                    <p>You requested a password reset for your Devil App Store account.</p>
-                    <p>Please click this link to reset your password:</p>
-                    <p><a href="${resetURL}">${resetURL}</a></p>
-                    <p>This link will expire in one hour.</p>
-                    <p>If you did not request this, please ignore this email.</p>
-                `
+                html: `<p>You requested a password reset. Click this link to reset your password:</p><a href="${resetURL}">${resetURL}</a><p>This link will expire in one hour.</p>`
             };
-
-            // ईमेल भेजें
             await transporter.sendMail(mailOptions);
         }
-        res.send('<h1>Success</h1><p>If an account with that email exists, a password reset link has been sent.</p>');
+        res.status(200).send('If an account with this email exists, a reset link has been sent.');
     } catch (error) {
         console.error("Forgot password error:", error);
-        res.status(500).send("<h1>Error</h1><p>An error occurred while sending the email.</p>");
+        res.status(500).send("An internal server error occurred.");
     }
 });
-// ====================== अपडेट का अंत ======================
 
-// ====================== यहाँ नया कोड जोड़ा गया है ======================
-// पासवर्ड रीसेट फॉर्म दिखाने के लिए
 app.get('/reset/:token', async (req, res) => {
     try {
-        const user = await User.findOne({ 
-            resetPasswordToken: req.params.token, 
-            resetPasswordExpires: { $gt: Date.now() } 
-        });
-        if (!user) {
-            return res.status(400).send('<h1>Error</h1><p>Password reset token is invalid or has expired.</p>');
-        }
+        const user = await User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } });
+        if (!user) return res.status(400).send('<h1>Error</h1><p>Password reset token is invalid or has expired.</p>');
         res.sendFile(path.join(__dirname, 'public', 'reset-password.html'));
-    } catch (error) {
-        res.status(500).send('<h1>Error</h1><p>An error occurred.</p>');
-    }
+    } catch (error) { res.status(500).send('<h1>Error</h1><p>An error occurred.</p>'); }
 });
 
-// नया पासवर्ड सबमिट करने के लिए
 app.post('/reset/:token', async (req, res) => {
     try {
-        const user = await User.findOne({ 
-            resetPasswordToken: req.params.token, 
-            resetPasswordExpires: { $gt: Date.now() } 
-        });
-        if (!user) {
-            return res.status(400).send('<h1>Error</h1><p>Password reset token is invalid or has expired.</p>');
-        }
-        if (req.body.password !== req.body.confirmPassword) {
-            return res.status(400).send('<h1>Error</h1><p>Passwords do not match.</p>');
-        }
+        const user = await User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } });
+        if (!user) return res.status(400).send('<h1>Error</h1><p>Password reset token is invalid or has expired.</p>');
+        if (req.body.password !== req.body.confirmPassword) return res.status(400).send('<h1>Error</h1><p>Passwords do not match.</p>');
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         user.password = hashedPassword;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         await user.save();
-
         res.send('<h1>Success!</h1><p>Your password has been reset. You can now <a href="/login.html">login</a>.</p>');
-    } catch (error) {
-        res.status(500).send('<h1>Error</h1><p>Error resetting password.</p>');
-    }
+    } catch (error) { res.status(500).send('<h1>Error</h1><p>Error resetting password.</p>'); }
 });
-// ====================== नए कोड का अंत ======================
-
 
 // ACTIONS
 app.post('/verify', requireLogin, upload.single('aadhaarScan'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).send("<h1>Error</h1><p>Aadhaar scan file is required.</p>");
-        await User.findByIdAndUpdate(req.session.userId, {
-            fullName: req.body.fullName,
-            aadhaarNumber: req.body.aadhaarNumber,
-            verificationStatus: 'pending'
-        });
+        await User.findByIdAndUpdate(req.session.userId, { fullName: req.body.fullName, aadhaarNumber: req.body.aadhaarNumber, verificationStatus: 'pending' });
         res.redirect('/dashboard');
     } catch(error) { res.status(500).send("<h1>Error</h1><p>Verification submission failed.</p>"); }
 });
 
-app.post('/upload-app', requireLogin, requireVerified, upload.fields([
-    { name: 'appFile', maxCount: 1 }, { name: 'appIcon', maxCount: 1 }, { name: 'screenshots', maxCount: 5 }
-]), async (req, res) => {
+app.post('/upload-app', requireLogin, requireVerified, upload.fields([ { name: 'appFile', maxCount: 1 }, { name: 'appIcon', maxCount: 1 }, { name: 'screenshots', maxCount: 5 } ]), async (req, res) => {
     try {
-        const { appName, category, description, isPaid, price } = req.body;
+        const { appName, category, description, isPaid, price, version } = req.body;
         await App.create({
             appName, category, description,
+            version: version || '1.0',
             isPaid: isPaid === 'true',
             price: isPaid === 'true' ? price : 0,
             developer: req.session.userId,
@@ -248,20 +210,18 @@ app.post('/upload-app', requireLogin, requireVerified, upload.fields([
             screenshots: req.files['screenshots'] ? req.files['screenshots'].map(file => file.path) : []
         });
         res.redirect('/dashboard');
-    } catch (error) { res.status(500).send("<h1>Error</h1><p>App upload failed.</p>"); }
+    } catch (error) { console.error(error); res.status(500).send("<h1>Error</h1><p>App upload failed.</p>"); }
 });
 
-app.post('/update-app/:appId', requireLogin, upload.fields([
-    { name: 'appFile', maxCount: 1 }, { name: 'appIcon', maxCount: 1 }, { name: 'screenshots', maxCount: 5 }
-]), async (req, res) => {
+app.post('/update-app/:appId', requireLogin, upload.fields([ { name: 'appFile', maxCount: 1 }, { name: 'appIcon', maxCount: 1 }, { name: 'screenshots', maxCount: 5 } ]), async (req, res) => {
     try {
-        const { appName, category, description, isPaid, price } = req.body;
-        const updateData = { appName, category, description, isPaid: isPaid === 'true', price: isPaid === 'true' ? price : 0 };
+        const { appName, category, description, isPaid, price, version } = req.body;
+        const updateData = { appName, category, description, isPaid: isPaid === 'true', price: isPaid === 'true' ? price : 0, version };
         if (req.files['appFile']) updateData.filePath = req.files['appFile'][0].path;
         if (req.files['appIcon']) updateData.iconPath = req.files['appIcon'][0].path;
         await App.findByIdAndUpdate(req.params.appId, updateData);
         res.redirect('/dashboard');
-    } catch (error) { res.status(500).send("<h1>Error</h1><p>App update failed.</p>"); }
+    } catch (error) { console.error(error); res.status(500).send("<h1>Error</h1><p>App update failed.</p>"); }
 });
 
 app.post('/api/delete-app/:appId', requireLogin, async (req, res) => {
@@ -270,7 +230,7 @@ app.post('/api/delete-app/:appId', requireLogin, async (req, res) => {
         const app = await App.findOne({ _id: appId, developer: req.session.userId });
         if (!app) return res.status(404).json({ error: 'App not found or you are not the owner.' });
         await App.findByIdAndDelete(appId);
-        res.json({ success: true, message: 'App deleted successfully.' });
+        res.json({ success: true });
     } catch (error) { res.status(500).json({ error: 'Server error while deleting app.' }); }
 });
 
@@ -332,58 +292,52 @@ app.get('/api/search', async (req, res) => {
     } catch { res.status(500).json({ error: 'Server error during search.' }); }
 });
 
-// DOWNLOAD ROUTE (Final Robust Version for All Browsers)
+// DOWNLOAD ROUTE (Simplest and Most Robust Version)
 app.get('/download/:appId', async (req, res) => {
     try {
         const appId = req.params.appId;
         const app = await App.findById(appId);
 
-        // जांचें कि ऐप और फाइल पाथ मौजूद है या नहीं
         if (!app || !app.filePath) {
-            return res.status(404).send('<h1>404 Not Found</h1><p>The app or its file path could not be found.</p>');
+            return res.status(404).send('File record not found.');
         }
         
         // डाउनलोड की गिनती और रिकॉर्डिंग
         app.downloadCount += 1;
         await app.save();
         
-        const downloadRecord = new Download({
-            app: appId,
-            referredBy: req.query.ref,
-            ipAddress: req.ip
-        });
+        const downloadRecord = new Download({ app: appId, referredBy: req.query.ref, ipAddress: req.ip });
         await downloadRecord.save();
         
-        // --- यह सबसे विश्वसनीय समाधान है ---
+        // --- यह सबसे सरल समाधान है ---
 
-        // 1. सर्वर के रूट डायरेक्टरी से एक एब्सोल्यूट पाथ बनाएं
-        const absoluteFilePath = path.resolve(process.cwd(), app.filePath);
+        // 1. सर्वर के रूट से सिर्फ फाइल का नाम लें
+        const fileNameOnServer = path.basename(app.filePath);
 
-        // 2. उपयोगकर्ता के लिए एक सुंदर फाइल नाम बनाएं
+        // 2. uploads फोल्डर का पूरा पाथ बनाएं
+        const absoluteFilePath = path.join(__dirname, 'uploads', fileNameOnServer);
+
+        // 3. उपयोगकर्ता के लिए एक सुंदर फाइल नाम बनाएं
         const friendlyFileName = `${app.appName}${path.extname(app.filePath)}`;
         
-        // 3. Content-Disposition हेडर को मैन्युअल रूप से सेट करें
-        // यह ब्राउज़र को फाइल का नाम और यह बताता है कि इसे डाउनलोड करना है
-        res.setHeader('Content-Disposition', `attachment; filename="${friendlyFileName}"`);
-
-        // 4. अब res.sendFile का उपयोग करके फाइल भेजें
-        res.sendFile(absoluteFilePath, (err) => {
+        // 4. res.download() का उपयोग करें, यह सबसे विश्वसनीय तरीका है
+        res.download(absoluteFilePath, friendlyFileName, (err) => {
             if (err) {
-                console.error(`Error sending the file "${friendlyFileName}":`, err.message);
+                console.error(`Download Error for AppID ${appId}:`, err);
+                // एरर को सीधे तौर पर न भेजें, बस एक सामान्य संदेश दें
                 if (!res.headersSent) {
-                    res.status(404).send("<h1>Error</h1><p>File not found on server.</p>");
+                    res.status(404).send("Could not find the file to download. It may have been removed.");
                 }
             }
         });
 
     } catch (error) {
-        console.error("Critical error in download route:", error);
+        console.error(`Critical error in download route for AppID ${req.params.appId}:`, error);
         if (!res.headersSent) {
-            res.status(500).send("<h1>Error</h1><p>An internal server error occurred.</p>");
+            res.status(500).send("An internal server error occurred.");
         }
     }
 });
-
 // 7. पेज सर्विंग रूट्स (HTML फाइलें)
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
@@ -397,7 +351,6 @@ app.get('/edit-app.html', requireLogin, (req, res) => res.sendFile(path.join(__d
 app.get('/statistics.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'statistics.html')));
 app.get('/settings.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'settings.html')));
 app.get('/app/:appId', (req, res) => res.sendFile(path.join(__dirname, 'public', 'app-detail.html')));
-
 
 // 8. डेटाबेस कनेक्शन और सर्वर स्टार्ट
 mongoose.connect(CONNECTION_STRING)
