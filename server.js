@@ -332,22 +332,56 @@ app.get('/api/search', async (req, res) => {
     } catch { res.status(500).json({ error: 'Server error during search.' }); }
 });
 
-// DOWNLOAD ROUTE
+// DOWNLOAD ROUTE (Final Robust Version for All Browsers)
 app.get('/download/:appId', async (req, res) => {
     try {
         const appId = req.params.appId;
         const app = await App.findById(appId);
-        if (!app) return res.status(404).send('App not found.');
+
+        // जांचें कि ऐप और फाइल पाथ मौजूद है या नहीं
+        if (!app || !app.filePath) {
+            return res.status(404).send('<h1>404 Not Found</h1><p>The app or its file path could not be found.</p>');
+        }
         
+        // डाउनलोड की गिनती और रिकॉर्डिंग
         app.downloadCount += 1;
         await app.save();
-        const downloadRecord = new Download({ app: appId, referredBy: req.query.ref, ipAddress: req.ip });
+        
+        const downloadRecord = new Download({
+            app: appId,
+            referredBy: req.query.ref,
+            ipAddress: req.ip
+        });
         await downloadRecord.save();
         
-        const filePath = path.join(__dirname, app.filePath);
-        const friendlyFileName = `${app.appName.replace(/[^a-zA-Z0-9_.-]/g, '_')}${path.extname(app.filePath)}`;
-        res.download(filePath, friendlyFileName);
-    } catch (error) { res.status(500).send("Error processing your download."); }
+        // --- यह सबसे विश्वसनीय समाधान है ---
+
+        // 1. सर्वर के रूट डायरेक्टरी से एक एब्सोल्यूट पाथ बनाएं
+        const absoluteFilePath = path.resolve(process.cwd(), app.filePath);
+
+        // 2. उपयोगकर्ता के लिए एक सुंदर फाइल नाम बनाएं
+        const friendlyFileName = `${app.appName}${path.extname(app.filePath)}`;
+        
+        // 3. Content-Disposition हेडर को मैन्युअल रूप से सेट करें
+        // यह ब्राउज़र को फाइल का नाम और यह बताता है कि इसे डाउनलोड करना है
+        res.setHeader('Content-Disposition', `attachment; filename="${friendlyFileName}"`);
+
+        // 4. अब res.sendFile का उपयोग करके फाइल भेजें
+        res.sendFile(absoluteFilePath, (err) => {
+            if (err) {
+                console.error(`Error sending the file "${friendlyFileName}":`, err.message);
+                if (!res.headersSent) {
+                    res.status(404).send("<h1>Error</h1><p>File not found on server.</p>");
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error("Critical error in download route:", error);
+        if (!res.headersSent) {
+            res.status(500).send("<h1>Error</h1><p>An internal server error occurred.</p>");
+        }
+    }
 });
 
 // 7. पेज सर्विंग रूट्स (HTML फाइलें)
