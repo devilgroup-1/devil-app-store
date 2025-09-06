@@ -367,28 +367,36 @@ app.get('/download/:appId', async (req, res) => {
         }
     }
 });
-
+// =================================================================
 // 7. पेज सर्विंग रूट्स (HTML फाइलें)
+// =================================================================
+
+// Public routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/forgot-password.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'forgot-password.html')));
 app.get('/reset-password.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'reset-password.html')));
 app.get('/apps.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'apps.html')));
 app.get('/search', (req, res) => res.sendFile(path.join(__dirname, 'public', 'search.html')));
+
+// Legal & Info Pages
 app.get('/about-us.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'about-us.html')));
 app.get('/contact-us.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact-us.html')));
 app.get('/privacy-policy.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'privacy-policy.html')));
 app.get('/terms-and-conditions.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'terms-and-conditions.html')));
-app.get('/subscription.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscription.html')));
-app.get('/checkout', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'checkout.html')));
+app.get('/refund-policy.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'refund-policy.html')));
+
+// Protected routes (Login Required)
 app.get('/dashboard', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'dashboard.html')));
 app.get('/upload.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'upload.html')));
 app.get('/edit-app.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'edit-app.html')));
 app.get('/statistics.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'statistics.html')));
 app.get('/settings.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'settings.html')));
+app.get('/subscription.html', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'subscription.html')));
+app.get('/checkout', requireLogin, (req, res) => res.sendFile(path.join(__dirname, 'public', 'checkout.html')));
 
+// Dynamic route (MUST BE LAST)
 app.get('/app/:appId', (req, res) => res.sendFile(path.join(__dirname, 'public', 'app-detail.html')));
-
 // 8. डेटाबेस कनेक्शन और सर्वर स्टार्ट
 mongoose.connect(CONNECTION_STRING)
   .then(() => {
