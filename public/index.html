@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devil App Store - Your App Universe</title>
-
+<!-- ====================== Favicon Code ====================== -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,10 +27,6 @@
         <div class="container">
             <a href="/" class="logo">Devil App Store</a>
             <nav id="main-nav">
-                <form action="/search" method="GET" class="search-form">
-                    <input type="text" name="q" placeholder="Search for apps, music..." class="search-input" required>
-                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
-                </form>
                 <ul>
                     <li><a href="/" class="active">Home</a></li>
                     <li><a href="/apps.html?category=app">Apps</a></li>
@@ -48,12 +48,14 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-images">
-                <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=R.O.G" alt="Game Art 1">
-                <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=Syano" alt="Game Art 2">
-                <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=DxAngel" alt="Game Art 3">
+            <div class="container">
+                <h1>Unleash Your Creations. Upload for Free. Monetize Your Apps.</h1>
+                <div class="hero-images">
+                    <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=R.O.G" alt="Game Art 1">
+                    <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=Syano" alt="Game Art 2">
+                    <img src="https://via.placeholder.com/120/1A1A2E/E4003A?text=DxAngel" alt="Game Art 3">
+                </div>
             </div>
-            <h1>Unleash Your Creations. Upload for Free. Monetize Your Apps.</h1>
         </section>
 
         <!-- Trending Apps Section -->
@@ -88,9 +90,13 @@
             </div>
         </section>
 
-        <!-- Top Categories Section -->
+        <!-- Categories & Stats Section -->
         <section class="categories-section">
             <div class="container">
+                <div class="stats-preview">
+                    <!-- यह हिस्सा अभी के लिए खाली छोड़ा गया है, जैसा कि डिज़ाइन में है -->
+                    <!-- भविष्य में आप यहाँ एक आँकड़ों का चार्ट जोड़ सकते हैं -->
+                </div>
                 <div class="top-categories">
                     <h2>Top Categories</h2>
                     <div class="category-grid">
@@ -99,7 +105,7 @@
                             <span>Apps</span>
                         </a>
                         <a href="/apps.html?category=music" class="category-card">
-                            <i class="fas fa-music"></i>
+                            <i class="fas fa-hat-wizard"></i> <!-- डेविल मास्क जैसा आइकन -->
                             <span>Music</span>
                         </a>
                         <a href="/apps.html?category=game" class="category-card">
@@ -110,15 +116,21 @@
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Devil App Store. All rights reserved.</p>
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="/about-us.html">About Us</a>
+            <a href="/contact-us.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-and-conditions.html">Terms & Conditions</a>
         </div>
-    </footer>
-
+        <p style="margin-top: 15px;">&copy; 2025 Devil App Store. All rights reserved.</p>
+    </div>
+</footer>
     <!-- Scripts -->
     <script src="/script.js"></script>
     <script src="/home.js"></script>

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit App - Devil App Store</title>
-
+<!-- ====================== Favicon Code ====================== -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
     <!-- Google Fonts, Font Awesome, Stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +25,7 @@
             <nav id="main-nav">
                 <ul>
                     <li><a href="/logout" class="btn-logout">Logout</a></li>
+                        <li><a href="/subscription.html"><i class="fas fa-rocket"></i> Subscription</a></li>
                 </ul>
             </nav>
             <div class="menu-toggle" id="mobile-menu"><span></span><span></span><span></span></div>
@@ -33,7 +38,7 @@
             <h1 class="page-title" id="edit-page-title">Edit App</h1>
             <div class="dashboard-layout">
                 
-                <!-- Sidebar Navigation -->
+                <!-- Sidebar Navigation (Corrected active class) -->
                 <aside class="dashboard-sidebar">
                     <ul>
                         <li><a href="/upload.html"><i class="fas fa-upload"></i> Upload New App</a></li>
@@ -53,9 +58,19 @@
             </div>
         </div>
     </main>
-    
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="/about-us.html">About Us</a>
+            <a href="/contact-us.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-and-conditions.html">Terms & Conditions</a>
+        </div>
+        <p style="margin-top: 15px;">&copy; 2025 Devil App Store. All rights reserved.</p>
+    </div>
+</footer>
     <!-- Scripts -->
     <script src="/script.js"></script>
-    <script src="/edit-app.js"></script> <!-- इस पेज के लिए खास नई जावास्क्रिप्ट फाइल -->
+    <script src="/edit-app.js"></script>
 </body>
 </html>

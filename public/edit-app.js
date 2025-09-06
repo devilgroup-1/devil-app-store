@@ -1,40 +1,54 @@
 // =================================================================
-// ऐप एडिट पेज स्क्रिप्ट
-// यह मौजूदा ऐप का डेटा लाती है और उसे अपडेट करने देती है
+// ऐप एडिट पेज स्क्रिप्ट (अंतिम संस्करण)
 // =================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    // HTML एलिमेंट्स को चुनें
     const editFormContainer = document.getElementById('edit-form-container');
-    if (!editFormContainer) return;
+    const pageTitle = document.getElementById('edit-page-title');
+    
+    // अगर पेज पर ये एलिमेंट्स नहीं हैं, तो कुछ न करें
+    if (!editFormContainer || !pageTitle) {
+        console.error('Required elements not found on edit page.');
+        return;
+    }
 
-    // 1. URL से ऐप की ID निकालें (जैसे ?id=xxxxxxxx)
+    // --- 1. URL से ऐप की ID निकालें ---
     const urlParams = new URLSearchParams(window.location.search);
     const appId = urlParams.get('id');
 
     if (!appId) {
-        editFormContainer.innerHTML = '<p class="empty-message">No App ID provided. Please go back to the dashboard.</p>';
+        editFormContainer.innerHTML = '<p class="empty-message">No App ID provided. Please go back to the dashboard and click "Edit" on an app.</p>';
         return;
     }
 
     try {
-        // 2. API से उस ऐप का मौजूदा डेटा प्राप्त करें
+        // --- 2. API से उस ऐप का मौजूदा डेटा प्राप्त करें ---
         const response = await fetch(`/api/app/${appId}`);
-        if (!response.ok) throw new Error('App not found or you do not have permission to edit it.');
+        if (!response.ok) {
+            throw new Error('App not found or you do not have permission to edit it.');
+        }
         const app = await response.json();
 
-        // 3. पेज का शीर्षक बदलें
-        const pageTitle = document.getElementById('edit-page-title');
-        if(pageTitle) pageTitle.textContent = `Editing: ${app.appName}`;
+        // --- 3. पेज का शीर्षक बदलें ---
+        pageTitle.textContent = `Editing: ${app.appName}`;
 
-        // 4. फॉर्म का पूरा HTML बनाएं और उसे डेटा से भरें
+        // --- 4. फॉर्म का पूरा HTML बनाएं और उसे डेटा से भरें ---
         const formHtml = `
             <h2>App Details</h2>
-            <p class="description">Update the details for your app below. To change the file or icon, simply upload a new one. Leave fields blank to keep them unchanged.</p>
+            <p class="description">Update the details for your app below. To change the file, icon, or screenshots, simply upload new ones. Leave file fields blank to keep the existing ones.</p>
             
             <form class="upload-form" action="/update-app/${appId}" method="POST" enctype="multipart/form-data">
+                
                 <div class="form-group">
                     <label for="appName">App / Creation Name</label>
                     <input type="text" id="appName" name="appName" class="form-control" value="${app.appName || ''}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appVersion">Version</label>
+                    <input type="text" id="appVersion" name="version" class="form-control" value="${app.version || '1.0'}" placeholder="e.g., 1.1 or 2.0" required>
                 </div>
 
                 <div class="form-group">
@@ -62,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 <div class="form-group">
                     <label for="appFile">Update Main File (Optional)</label>
-                    <p class="description" style="margin-bottom: 5px;">Current: ${app.filePath.split(/[\\/]/).pop()}</p>
+                    <p class="description" style="margin-bottom: 5px; font-size: 0.8em;">Current: ${app.filePath.split(/[\\/]/).pop()}</p>
                     <input type="file" id="appFile" name="appFile" class="form-control">
                 </div>
 
@@ -85,15 +99,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             </form>
         `;
 
-        // 5. फॉर्म को पेज पर दिखाएं
+        // --- 5. फॉर्म को पेज पर दिखाएं ---
         editFormContainer.innerHTML = formHtml;
         
-        // 6. मुद्रीकरण (Monetization) ड्रॉपडाउन के लिए इवेंट लिसनर जोड़ें
-        document.getElementById('monetization-type').addEventListener('change', function() {
-            document.getElementById('price-input-container').style.display = this.value === 'true' ? 'block' : 'none';
-        });
+        // --- 6. मुद्रीकरण (Monetization) ड्रॉपडाउन के लिए इवेंट लिसनर जोड़ें ---
+        const monetizationSelect = document.getElementById('monetization-type');
+        const priceContainer = document.getElementById('price-input-container');
+        if (monetizationSelect && priceContainer) {
+            monetizationSelect.addEventListener('change', function() {
+                priceContainer.style.display = this.value === 'true' ? 'block' : 'none';
+            });
+        }
 
     } catch (error) {
+        // अगर कोई भी एरर आता है, तो एक उपयोगी संदेश दिखाएं
         console.error('Failed to load app for editing:', error);
         editFormContainer.innerHTML = `<p class="empty-message">${error.message}</p>`;
     }

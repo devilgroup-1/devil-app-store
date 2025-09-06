@@ -66,67 +66,41 @@ header {
     z-index: 100;
     backdrop-filter: blur(10px);
 }
-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.logo {
-    font-size: 1.8em;
-    font-weight: 700;
-    color: var(--primary-red);
-}
-nav {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
-nav ul {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-nav a {
-    color: var(--text-light);
-    font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    padding: 8px 15px;
-    border-radius: 5px;
-}
-nav a:hover, nav a.active {
-    background-color: var(--primary-red);
-}
-.btn-login {
-    background-color: var(--primary-red);
-}
-.search-form {
-    display: flex;
-    align-items: center;
-    background-color: var(--card-bg);
-    border-radius: 50px;
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-    width: 300px;
-}
-.search-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text-light);
-    padding: 10px 20px;
-    font-size: 0.9em;
-    width: 100%;
-}
-.search-button {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 1em;
-}
+header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.8em; font-weight: 700; color: var(--primary-red); }
+nav { display: flex; align-items: center; gap: 30px; }
+nav ul { list-style: none; display: flex; align-items: center; gap: 15px; }
+nav a { color: var(--text-light); font-weight: 500; transition: background-color 0.3s ease, color 0.3s ease; padding: 8px 15px; border-radius: 5px; }
+nav a:hover, nav a.active { background-color: var(--primary-red); }
+.btn-login { background-color: var(--primary-red); }
+.search-form { display: flex; align-items: center; background-color: var(--card-bg); border-radius: 50px; border: 1px solid var(--border-color); overflow: hidden; width: 300px; }
+.search-input { background: transparent; border: none; outline: none; color: var(--text-light); padding: 10px 20px; font-size: 0.9em; width: 100%; }
+.search-button { background: transparent; border: none; color: var(--text-muted); padding: 10px 15px; cursor: pointer; font-size: 1em; }
 .search-button:hover { color: var(--primary-red); }
+/* . कार्ड्स और बटन्स */
+.app-card, .feature-card, .category-card, .content-card, .login-container, .plan-card {
+    background: linear-gradient(145deg, #1a1a1a, #111111);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+.app-card:hover { border-color: var(--primary-red); box-shadow: 0 0 20px var(--glow-red); }
+.btn-primary {
+    background: var(--secondary-blue); color: var(--bg-dark);
+    box-shadow: 0 0 15px var(--glow-blue);
+}
+.btn-form {
+    background: var(--primary-red);
+    box-shadow: 0 0 15px var(--glow-red);
+}
+
+/* 4. डैशबोर्ड */
+.dashboard-sidebar ul { background-color: transparent; border: none; }
+.dashboard-sidebar ul li a.active {
+    background: var(--primary-red);
+    box-shadow: 0 0 15px var(--glow-red);
+}
+.app-status.approved { background-color: var(--green-status); color: var(--bg-dark); text-shadow: none; }
+.app-status.pending { background-color: var(--yellow-status); color: var(--bg-dark); text-shadow: none; }
 
 /* =================================================================
    3. होमपेज के सेक्शन्स
@@ -182,40 +156,32 @@ nav a:hover, nav a.active {
 .dashboard-main { padding: 50px 0; }
 .dashboard-layout { display: flex; gap: 30px; align-items: flex-start; }
 .dashboard-sidebar { width: 280px; flex-shrink: 0; }
-.dashboard-sidebar ul { list-style: none; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 15px; }
-.dashboard-sidebar ul li a { display: flex; align-items: center; gap: 15px; padding: 18px 20px; color: var(--text-muted); font-weight: 500; border-radius: 10px; transition: all 0.3s ease; font-size: 1.1em; }
+.dashboard-sidebar ul { list-style: none; background-color: var(--card-bg-lighter); border: 1px solid var(--border-color); border-radius: 15px; padding: 15px; }
+.dashboard-sidebar ul li a { display: flex; align-items: center; gap: 15px; padding: 18px 20px; color: var(--text-muted); font-weight: 500; border-radius: 10px; transition: all 0.3s ease; font-size: 1.1em; border-left: 3px solid transparent; }
 .dashboard-sidebar ul li a i { font-size: 1.2em; width: 25px; text-align: center; }
-.dashboard-sidebar ul li a:hover { color: var(--text-light); }
+.dashboard-sidebar ul li a:hover { color: var(--text-light); background-color: rgba(255,255,255,0.05); }
 .dashboard-sidebar ul li a.active { background-color: var(--primary-red); color: var(--text-light); }
-.dashboard-content { flex: 1; }
-.content-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; margin-bottom: 30px; }
+.content-card { background-color: var(--card-bg-lighter); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; margin-bottom: 30px; }
 .content-card h2 { font-size: 1.8em; margin-bottom: 25px; }
-.dashboard-app-list { display: flex; flex-direction: column; gap: 15px; }
-.dashboard-app-card { display: flex; align-items: center; gap: 20px; background-color: var(--bg-dark); padding: 15px; border-radius: 10px; }
-.dashboard-app-card .app-icon { font-size: 2.5em; color: var(--primary-red); }
-.dashboard-app-card .app-info { flex-grow: 1; }
-.dashboard-app-card .app-info h3 { font-size: 1.2em; }
-.dashboard-app-card .app-info .downloads { color: var(--text-muted); font-size: 0.9em; }
-.app-status { font-weight: 600; padding: 8px 15px; border-radius: 50px; font-size: 0.9em; text-transform: capitalize; }
+.dashboard-app-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.dashboard-app-card { background-color: var(--bg-dark); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+.app-card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.app-icon-small { width: 50px; height: 50px; object-fit: cover; border-radius: 10px; }
+.app-info { flex-grow: 1; }
+.app-info h3 { font-size: 1.2em; color: var(--text-light); }
+.app-info .version { color: var(--text-muted); font-size: 0.9em; }
+.app-status { font-weight: 600; padding: 5px 12px; border-radius: 50px; font-size: 0.8em; text-transform: capitalize; }
 .app-status.approved { background-color: rgba(0, 200, 83, 0.2); color: var(--green-status); }
 .app-status.pending { background-color: rgba(255, 171, 0, 0.2); color: var(--yellow-status); }
 .app-status.rejected { background-color: rgba(228, 0, 58, 0.2); color: var(--primary-red); }
-.app-actions { margin-left: auto; display: flex; gap: 10px; }
-.btn-action-edit, .btn-action-delete { background: var(--border-color); color: var(--text-light); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
-.btn-action-delete:hover { background: var(--primary-red); }
-.verification-status-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-.verification-status-wrapper span { font-size: 0.8em; color: var(--text-muted); }
-.verification-status { padding: 8px 12px; border-radius: 5px; font-weight: 600; display: inline-block; text-transform: capitalize; }
-.verification-status.not_submitted { background-color: var(--text-muted); color: var(--bg-dark); }
-.verification-status.pending { background-color: var(--yellow-status); color: var(--bg-dark); }
-.verification-status.verified { background-color: var(--green-status); color: var(--text-light); }
-.verification-status.rejected { background-color: var(--primary-red); color: var(--text-light); }
-.description { color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
-.stats-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-.stat-card { background-color: var(--bg-dark); padding: 25px; border-radius: 10px; text-align: center; }
-.stat-card h3 { color: var(--text-muted); font-size: 1.1em; margin-bottom: 15px; }
-.stat-card i { margin-right: 10px; }
-.stat-card p { font-size: 2.5em; font-weight: 700; color: var(--primary-red); }
+.app-info-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 0.9em; color: var(--text-muted); }
+.category-tag { background-color: var(--border-color); padding: 4px 10px; border-radius: 5px; font-size: 0.8em; }
+.app-actions { display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 15px; }
+.btn-action-edit, .btn-action-delete, .btn-action-stats { flex: 1; text-align: center; background: #333; color: var(--text-muted); border: none; padding: 10px; border-radius: 5px; cursor: pointer; transition: all 0.2s ease; }
+.btn-action-edit:hover, .btn-action-stats:hover { background-color: var(--primary-red); color: var(--text-light); }
+.btn-action-delete:hover { background-color: #ff3b3b; color: var(--text-light); }
+
+/* ... (बाकी का CSS वैसा ही रहेगा) ... */
 
 /* =================================================================
    7. ऐप डिटेल पेज
@@ -239,13 +205,16 @@ nav a:hover, nav a.active {
    ================================================================= */
 .menu-toggle { display: none; }
 @media (max-width: 1100px) {
+    nav { gap: 15px; }
     nav ul { display: none; }
+    .search-form { width: 200px; }
     .menu-toggle { display: flex; width: 30px; height: 25px; cursor: pointer; flex-direction: column; justify-content: space-between; }
     .menu-toggle span { width: 100%; height: 3px; background-color: var(--text-light); border-radius: 2px; transition: all 0.3s ease; }
     .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
     .menu-toggle.active span:nth-child(2) { opacity: 0; }
     .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
     header nav.active { display: block; position: absolute; top: 81px; left: 0; width: 100%; background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); }
+    header nav.active .search-form { display: flex; margin: 15px auto; width: 90%; }
     header nav.active ul { display: flex; flex-direction: column; width: 100%; padding: 10px 0; gap: 0; }
     header nav.active ul li { width: 100%; text-align: center; }
     header nav a { display: block; padding: 15px 0; width: 100%; }
@@ -257,7 +226,7 @@ nav a:hover, nav a.active {
 }
 @media (max-width: 768px) {
     .hero h1, .app-title-info h1 { font-size: 2.2em; }
-    .search-form { display: none; }
+    nav .search-form { display: none; }
 }
 
 /* =================================================================
@@ -265,8 +234,27 @@ nav a:hover, nav a.active {
    ================================================================= */
 footer {
     text-align: center;
-    padding: 40px 0;
+    padding: 40px 20px;
     margin-top: 50px;
     border-top: 1px solid var(--border-color);
+}
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.footer-links a {
     color: var(--text-muted);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.footer-links a:hover {
+    color: var(--primary-red);
+    text-decoration: underline;
+}
+footer p {
+    color: var(--text-muted);
+    font-size: 0.9em;
 }

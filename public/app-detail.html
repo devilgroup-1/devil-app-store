@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App Details - Devil App Store</title> 
-    
+<!-- ====================== Favicon Code ====================== -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,12 +56,53 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Devil App Store. All rights reserved.</p>
+    <!-- ============== यहीं पर नया कोड जोड़ा गया है ============== -->
+    <section class="app-reviews container">
+        <h2>Ratings & Reviews</h2>
+        <div class="reviews-summary">
+            <div class="average-rating" id="avg-rating-summary">0.0 ★</div>
         </div>
-    </footer>
+        
+        <div id="review-form-container" class="content-card" style="display: none; margin-top: 30px;">
+            <h3>Write a Review</h3>
+            <form id="review-form">
+                <div class="form-group">
+                    <label>Your Rating</label>
+                    <div class="star-rating">
+                        <i class="far fa-star" data-value="1" title="Poor"></i>
+                        <i class="far fa-star" data-value="2" title="Fair"></i>
+                        <i class="far fa-star" data-value="3" title="Good"></i>
+                        <i class="far fa-star" data-value="4" title="Very Good"></i>
+                        <i class="far fa-star" data-value="5" title="Excellent"></i>
+                    </div>
+                    <input type="hidden" name="rating" id="rating-value" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Your Comment</label>
+                    <textarea name="comment" id="comment" class="form-control" placeholder="Share your experience..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-form">Submit Review</button>
+            </form>
+        </div>
+        
+        <div id="reviews-list" style="margin-top: 30px;">
+            <p class="loading-message">Loading reviews...</p>
+        </div>
+    </section>
+    <!-- ======================= नए कोड का अंत ======================= -->
+
+    <!-- Footer (सही किया हुआ) -->
+    <footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="/about-us.html">About Us</a>
+            <a href="/contact-us.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-and-conditions.html">Terms & Conditions</a>
+        </div>
+        <p style="margin-top: 15px;">&copy; 2025 Devil App Store. All rights reserved.</p>
+    </div>
+</footer>
     
     <!-- Scripts -->
     <script src="/script.js"></script> 
